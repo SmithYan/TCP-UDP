@@ -4,10 +4,11 @@ using System.Net.Sockets;
 
 namespace ForTCP
 {
+    /// <summary>
+    /// TCP会话类，配合服务类
+    /// </summary>
     public class TCPSession
     {
-        public delegate void MSG(string Message);
-        public event MSG getMSG;
         #region Properties
         /// <summary>
         /// 特定的Socket用以传输

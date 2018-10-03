@@ -10,6 +10,9 @@ using System.Threading.Tasks;
 
 namespace ForTCP
 {
+    /// <summary>
+    /// TCP服务类
+    /// </summary>
     public class TCPServer
     {
         /// <summary>
@@ -28,12 +31,13 @@ namespace ForTCP
         /// 是否正在监听
         /// </summary>
         public bool Flag_Listen { get; set; }
+        public static  string msg="";
         /// <summary>
         /// 开启服务
         /// </summary>
         /// <param name="ip">需要绑定的ip</param>
         /// <param name="port">需要绑定的port</param>
-        /// <returns></returns>
+        /// <returns>开启结果</returns>
         public bool startServer(IPAddress ip, string port)
         {
             TCPSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
@@ -137,7 +141,6 @@ namespace ForTCP
         /// <param name="sokConnection">用来接收的会话端</param>
         private void ReceiveData(object sokConnection)
         {
-            Console.Write("123456789");
             TCPSession tCPSession = sokConnection as TCPSession;
             Socket SocketSession = tCPSession.Socket;
             tCPSession.IsConnected = true;
@@ -181,10 +184,11 @@ namespace ForTCP
                     byte[] buf = new byte[length - 16];
 
                     //将缓冲区中的数据写入byte数组中
-                    Array.Copy(arrMsgRec, 16, buf, 0, length - 10);
+                    Array.Copy(arrMsgRec, 16, buf, 0, length - 16);
 
                     //获得byte数组表示数据的字符串
                     string strReceived = Encoding.UTF8.GetString(buf);
+                    msg = ipEndPort+"-"+strReceived;
                 }
                 catch (Exception)
                 {
@@ -198,12 +202,16 @@ namespace ForTCP
         /// <param name="_endPoint">客户端套接字</param>
         /// <param name="_buf">发送的数组</param>
         /// <returns>是否发送成功</returns>
-        public bool SendData(string _endPoint, byte[] _buf)
+        public bool SendData(byte i, string _endPoint, byte[] _buf)
         {
+            List<byte> buflist = new List<byte>();
+            buflist.Add(i);
+            buflist.AddRange(_buf);
+            byte[] buf = buflist.ToArray();
             TCPSession myT = new TCPSession();
             if (Dic_ClientSession.TryGetValue(_endPoint, out myT))
             {
-                myT.Send(_buf);
+                myT.Send(buf);
                 return true;
             }
             else

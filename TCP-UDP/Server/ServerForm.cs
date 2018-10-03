@@ -1,14 +1,10 @@
 ﻿using ForTCP;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
 using System.Net;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
+using Timer = System.Windows.Forms.Timer;
 
 namespace Server
 {
@@ -16,6 +12,7 @@ namespace Server
     {
         TCPServer tCPServer;
         List<string> end_points = new List<string>();
+        string kk = "";
         public ServerForm()
         {
             InitializeComponent();
@@ -23,6 +20,7 @@ namespace Server
 
         private void EXITEToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            tCPServer.CloseServer();
             Application.Exit();
         }
 
@@ -39,6 +37,8 @@ namespace Server
                 rtbMSG.Text += "TCP服务开启失败\n";
             }
         }
+
+
         ///<summary>                                
         /// 传入域名返回对应的IP 转载请注明来自
         ///</summary>
@@ -68,6 +68,11 @@ namespace Server
 
         private void T_Tick(object sender, EventArgs e)
         {
+            if (kk != TCPServer.msg)
+            {
+                rtbMSG.Text += TCPServer.msg.Split('-')[0] + "已接收>>" + TCPServer.msg.Split('-')[1] + "\n";
+                kk = TCPServer.msg;
+            }
             foreach (string item in tCPServer.Dic_ClientSession.Keys)
             {
                 if (!cLBConnected.Items.Contains(item))
@@ -100,6 +105,31 @@ namespace Server
             {
                 for (int j = 0; j < cLBConnected.Items.Count; j++)
                     cLBConnected.SetItemChecked(j, false);
+            }
+        }
+
+        private void BTSend_Click(object sender, EventArgs e)
+        {
+            for (int i = 0; i < cLBConnected.Items.Count; i++)
+            {
+                if (cLBConnected.GetItemChecked(i))
+                {
+                    if (rBCmd.Checked)
+                    {
+                        tCPServer.SendData(1, cLBConnected.GetItemText(cLBConnected.Items[i]).Trim(), Encoding.UTF8.GetBytes(tBText.Text.Trim()));
+                        rtbMSG.Text += "已发送cmd命令>>" + tBText.Text.Trim() + "\n";
+                    }
+                    else if (rBText.Checked)
+                    {
+                        tCPServer.SendData(0, cLBConnected.GetItemText(cLBConnected.Items[i]).Trim(), Encoding.UTF8.GetBytes(tBText.Text.Trim()));
+                        rtbMSG.Text += "已发送Text文字>>" + tBText.Text.Trim() + "\n";
+                    }
+                    tBText.Text = "";
+                }
+                else
+                {
+                    MessageBox.Show("请选择要发送到的地方");
+                }
             }
         }
     }

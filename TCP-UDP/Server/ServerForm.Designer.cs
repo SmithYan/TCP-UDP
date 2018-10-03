@@ -32,35 +32,35 @@
             this.TCPTToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.OpenTCPToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.CloseTCPToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.closeSelectedSToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.UDPUToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.OpenUDPToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.CloseUDPToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.EXITEToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tabControlMain = new System.Windows.Forms.TabControl();
             this.tabPageTCP = new System.Windows.Forms.TabPage();
-            this.rtbMSG = new System.Windows.Forms.RichTextBox();
-            this.tabPageUDP = new System.Windows.Forms.TabPage();
+            this.sCMain = new System.Windows.Forms.SplitContainer();
+            this.cBAll = new System.Windows.Forms.CheckBox();
+            this.cLBConnected = new System.Windows.Forms.CheckedListBox();
             this.gBStart = new System.Windows.Forms.GroupBox();
             this.lBPort = new System.Windows.Forms.Label();
             this.tBPort = new System.Windows.Forms.TextBox();
             this.gBSend = new System.Windows.Forms.GroupBox();
+            this.BTSend = new System.Windows.Forms.Button();
             this.rBCmd = new System.Windows.Forms.RadioButton();
-            this.tBText = new System.Windows.Forms.RadioButton();
-            this.textBox1 = new System.Windows.Forms.TextBox();
-            this.button1 = new System.Windows.Forms.Button();
-            this.cLBConnected = new System.Windows.Forms.CheckedListBox();
-            this.sCMain = new System.Windows.Forms.SplitContainer();
-            this.closeSelectedSToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.cBAll = new System.Windows.Forms.CheckBox();
+            this.rBText = new System.Windows.Forms.RadioButton();
+            this.tBText = new System.Windows.Forms.TextBox();
+            this.rtbMSG = new System.Windows.Forms.RichTextBox();
+            this.tabPageUDP = new System.Windows.Forms.TabPage();
             this.menuStrip1.SuspendLayout();
             this.tabControlMain.SuspendLayout();
             this.tabPageTCP.SuspendLayout();
-            this.gBStart.SuspendLayout();
-            this.gBSend.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.sCMain)).BeginInit();
             this.sCMain.Panel1.SuspendLayout();
             this.sCMain.Panel2.SuspendLayout();
             this.sCMain.SuspendLayout();
+            this.gBStart.SuspendLayout();
+            this.gBSend.SuspendLayout();
             this.SuspendLayout();
             // 
             // menuStrip1
@@ -75,7 +75,7 @@
             this.menuStrip1.Padding = new System.Windows.Forms.Padding(4, 2, 0, 2);
             this.menuStrip1.Size = new System.Drawing.Size(656, 25);
             this.menuStrip1.TabIndex = 0;
-            this.menuStrip1.Text = "menuStrip1";
+            this.menuStrip1.Text = "menuStripMain";
             // 
             // TCPTToolStripMenuItem
             // 
@@ -100,6 +100,13 @@
             this.CloseTCPToolStripMenuItem.Size = new System.Drawing.Size(188, 22);
             this.CloseTCPToolStripMenuItem.Text = "CloseTCP（&C)";
             this.CloseTCPToolStripMenuItem.Click += new System.EventHandler(this.CloseTCPToolStripMenuItem_Click);
+            // 
+            // closeSelectedSToolStripMenuItem
+            // 
+            this.closeSelectedSToolStripMenuItem.Name = "closeSelectedSToolStripMenuItem";
+            this.closeSelectedSToolStripMenuItem.Size = new System.Drawing.Size(188, 22);
+            this.closeSelectedSToolStripMenuItem.Text = "CloseSelected（&S）";
+            this.closeSelectedSToolStripMenuItem.Click += new System.EventHandler(this.closeSelectedSToolStripMenuItem_Click);
             // 
             // UDPUToolStripMenuItem
             // 
@@ -153,27 +160,48 @@
             this.tabPageTCP.Text = "TCPServer";
             this.tabPageTCP.UseVisualStyleBackColor = true;
             // 
-            // rtbMSG
+            // sCMain
             // 
-            this.rtbMSG.BackColor = System.Drawing.Color.Azure;
-            this.rtbMSG.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.rtbMSG.Location = new System.Drawing.Point(0, 0);
-            this.rtbMSG.Margin = new System.Windows.Forms.Padding(2);
-            this.rtbMSG.Name = "rtbMSG";
-            this.rtbMSG.Size = new System.Drawing.Size(644, 214);
-            this.rtbMSG.TabIndex = 3;
-            this.rtbMSG.Text = "";
+            this.sCMain.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.sCMain.Location = new System.Drawing.Point(2, 2);
+            this.sCMain.Name = "sCMain";
+            this.sCMain.Orientation = System.Windows.Forms.Orientation.Horizontal;
             // 
-            // tabPageUDP
+            // sCMain.Panel1
             // 
-            this.tabPageUDP.Location = new System.Drawing.Point(4, 22);
-            this.tabPageUDP.Margin = new System.Windows.Forms.Padding(2);
-            this.tabPageUDP.Name = "tabPageUDP";
-            this.tabPageUDP.Padding = new System.Windows.Forms.Padding(2);
-            this.tabPageUDP.Size = new System.Drawing.Size(648, 422);
-            this.tabPageUDP.TabIndex = 1;
-            this.tabPageUDP.Text = "UDPServer";
-            this.tabPageUDP.UseVisualStyleBackColor = true;
+            this.sCMain.Panel1.BackColor = System.Drawing.SystemColors.ActiveCaption;
+            this.sCMain.Panel1.Controls.Add(this.cBAll);
+            this.sCMain.Panel1.Controls.Add(this.cLBConnected);
+            this.sCMain.Panel1.Controls.Add(this.gBStart);
+            this.sCMain.Panel1.Controls.Add(this.gBSend);
+            // 
+            // sCMain.Panel2
+            // 
+            this.sCMain.Panel2.Controls.Add(this.rtbMSG);
+            this.sCMain.Size = new System.Drawing.Size(644, 418);
+            this.sCMain.SplitterDistance = 200;
+            this.sCMain.TabIndex = 13;
+            // 
+            // cBAll
+            // 
+            this.cBAll.AutoSize = true;
+            this.cBAll.Location = new System.Drawing.Point(409, 7);
+            this.cBAll.Name = "cBAll";
+            this.cBAll.Size = new System.Drawing.Size(72, 16);
+            this.cBAll.TabIndex = 13;
+            this.cBAll.Text = "CheckAll";
+            this.cBAll.UseVisualStyleBackColor = true;
+            this.cBAll.CheckedChanged += new System.EventHandler(this.cBAll_CheckedChanged);
+            // 
+            // cLBConnected
+            // 
+            this.cLBConnected.BackColor = System.Drawing.SystemColors.ActiveCaption;
+            this.cLBConnected.Dock = System.Windows.Forms.DockStyle.Right;
+            this.cLBConnected.FormattingEnabled = true;
+            this.cLBConnected.Location = new System.Drawing.Point(493, 0);
+            this.cLBConnected.Name = "cLBConnected";
+            this.cLBConnected.Size = new System.Drawing.Size(151, 200);
+            this.cLBConnected.TabIndex = 12;
             // 
             // gBStart
             // 
@@ -208,16 +236,26 @@
             // gBSend
             // 
             this.gBSend.BackColor = System.Drawing.Color.Aquamarine;
-            this.gBSend.Controls.Add(this.button1);
+            this.gBSend.Controls.Add(this.BTSend);
             this.gBSend.Controls.Add(this.rBCmd);
+            this.gBSend.Controls.Add(this.rBText);
             this.gBSend.Controls.Add(this.tBText);
-            this.gBSend.Controls.Add(this.textBox1);
             this.gBSend.Location = new System.Drawing.Point(10, 84);
             this.gBSend.Name = "gBSend";
             this.gBSend.Size = new System.Drawing.Size(267, 99);
             this.gBSend.TabIndex = 11;
             this.gBSend.TabStop = false;
             this.gBSend.Text = "Send";
+            // 
+            // BTSend
+            // 
+            this.BTSend.Location = new System.Drawing.Point(177, 27);
+            this.BTSend.Name = "BTSend";
+            this.BTSend.Size = new System.Drawing.Size(75, 23);
+            this.BTSend.TabIndex = 15;
+            this.BTSend.Text = "Send";
+            this.BTSend.UseVisualStyleBackColor = true;
+            this.BTSend.Click += new System.EventHandler(this.BTSend_Click);
             // 
             // rBCmd
             // 
@@ -229,83 +267,47 @@
             this.rBCmd.Text = "Cmd";
             this.rBCmd.UseVisualStyleBackColor = true;
             // 
+            // rBText
+            // 
+            this.rBText.AutoSize = true;
+            this.rBText.Checked = true;
+            this.rBText.Location = new System.Drawing.Point(23, 27);
+            this.rBText.Name = "rBText";
+            this.rBText.Size = new System.Drawing.Size(47, 16);
+            this.rBText.TabIndex = 13;
+            this.rBText.TabStop = true;
+            this.rBText.Text = "Text";
+            this.rBText.UseVisualStyleBackColor = true;
+            // 
             // tBText
             // 
-            this.tBText.AutoSize = true;
-            this.tBText.Checked = true;
-            this.tBText.Location = new System.Drawing.Point(23, 27);
+            this.tBText.Location = new System.Drawing.Point(23, 60);
             this.tBText.Name = "tBText";
-            this.tBText.Size = new System.Drawing.Size(47, 16);
-            this.tBText.TabIndex = 13;
-            this.tBText.TabStop = true;
-            this.tBText.Text = "Text";
-            this.tBText.UseVisualStyleBackColor = true;
+            this.tBText.Size = new System.Drawing.Size(229, 21);
+            this.tBText.TabIndex = 12;
             // 
-            // textBox1
+            // rtbMSG
             // 
-            this.textBox1.Location = new System.Drawing.Point(23, 60);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(229, 21);
-            this.textBox1.TabIndex = 12;
+            this.rtbMSG.BackColor = System.Drawing.Color.Azure;
+            this.rtbMSG.Cursor = System.Windows.Forms.Cursors.Default;
+            this.rtbMSG.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.rtbMSG.Location = new System.Drawing.Point(0, 0);
+            this.rtbMSG.Margin = new System.Windows.Forms.Padding(2);
+            this.rtbMSG.Name = "rtbMSG";
+            this.rtbMSG.Size = new System.Drawing.Size(644, 214);
+            this.rtbMSG.TabIndex = 3;
+            this.rtbMSG.Text = "";
             // 
-            // button1
+            // tabPageUDP
             // 
-            this.button1.Location = new System.Drawing.Point(177, 27);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 23);
-            this.button1.TabIndex = 15;
-            this.button1.Text = "Send";
-            this.button1.UseVisualStyleBackColor = true;
-            // 
-            // cLBConnected
-            // 
-            this.cLBConnected.BackColor = System.Drawing.SystemColors.ActiveCaption;
-            this.cLBConnected.Dock = System.Windows.Forms.DockStyle.Right;
-            this.cLBConnected.FormattingEnabled = true;
-            this.cLBConnected.Location = new System.Drawing.Point(493, 0);
-            this.cLBConnected.Name = "cLBConnected";
-            this.cLBConnected.Size = new System.Drawing.Size(151, 200);
-            this.cLBConnected.TabIndex = 12;
-            // 
-            // sCMain
-            // 
-            this.sCMain.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.sCMain.Location = new System.Drawing.Point(2, 2);
-            this.sCMain.Name = "sCMain";
-            this.sCMain.Orientation = System.Windows.Forms.Orientation.Horizontal;
-            // 
-            // sCMain.Panel1
-            // 
-            this.sCMain.Panel1.BackColor = System.Drawing.SystemColors.ActiveCaption;
-            this.sCMain.Panel1.Controls.Add(this.cBAll);
-            this.sCMain.Panel1.Controls.Add(this.cLBConnected);
-            this.sCMain.Panel1.Controls.Add(this.gBStart);
-            this.sCMain.Panel1.Controls.Add(this.gBSend);
-            // 
-            // sCMain.Panel2
-            // 
-            this.sCMain.Panel2.Controls.Add(this.rtbMSG);
-            this.sCMain.Size = new System.Drawing.Size(644, 418);
-            this.sCMain.SplitterDistance = 200;
-            this.sCMain.TabIndex = 13;
-            // 
-            // closeSelectedSToolStripMenuItem
-            // 
-            this.closeSelectedSToolStripMenuItem.Name = "closeSelectedSToolStripMenuItem";
-            this.closeSelectedSToolStripMenuItem.Size = new System.Drawing.Size(188, 22);
-            this.closeSelectedSToolStripMenuItem.Text = "CloseSelected（&S）";
-            this.closeSelectedSToolStripMenuItem.Click += new System.EventHandler(this.closeSelectedSToolStripMenuItem_Click);
-            // 
-            // cBAll
-            // 
-            this.cBAll.AutoSize = true;
-            this.cBAll.Location = new System.Drawing.Point(409, 7);
-            this.cBAll.Name = "cBAll";
-            this.cBAll.Size = new System.Drawing.Size(72, 16);
-            this.cBAll.TabIndex = 13;
-            this.cBAll.Text = "CheckAll";
-            this.cBAll.UseVisualStyleBackColor = true;
-            this.cBAll.CheckedChanged += new System.EventHandler(this.cBAll_CheckedChanged);
+            this.tabPageUDP.Location = new System.Drawing.Point(4, 22);
+            this.tabPageUDP.Margin = new System.Windows.Forms.Padding(2);
+            this.tabPageUDP.Name = "tabPageUDP";
+            this.tabPageUDP.Padding = new System.Windows.Forms.Padding(2);
+            this.tabPageUDP.Size = new System.Drawing.Size(648, 422);
+            this.tabPageUDP.TabIndex = 1;
+            this.tabPageUDP.Text = "UDPServer";
+            this.tabPageUDP.UseVisualStyleBackColor = true;
             // 
             // ServerForm
             // 
@@ -322,15 +324,15 @@
             this.menuStrip1.PerformLayout();
             this.tabControlMain.ResumeLayout(false);
             this.tabPageTCP.ResumeLayout(false);
-            this.gBStart.ResumeLayout(false);
-            this.gBStart.PerformLayout();
-            this.gBSend.ResumeLayout(false);
-            this.gBSend.PerformLayout();
             this.sCMain.Panel1.ResumeLayout(false);
             this.sCMain.Panel1.PerformLayout();
             this.sCMain.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.sCMain)).EndInit();
             this.sCMain.ResumeLayout(false);
+            this.gBStart.ResumeLayout(false);
+            this.gBStart.PerformLayout();
+            this.gBSend.ResumeLayout(false);
+            this.gBSend.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -349,19 +351,19 @@
         private System.Windows.Forms.TabControl tabControlMain;
         private System.Windows.Forms.TabPage tabPageTCP;
         private System.Windows.Forms.TabPage tabPageUDP;
-        private System.Windows.Forms.RichTextBox rtbMSG;
         private System.Windows.Forms.GroupBox gBSend;
         private System.Windows.Forms.RadioButton rBCmd;
-        private System.Windows.Forms.RadioButton tBText;
-        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.RadioButton rBText;
+        private System.Windows.Forms.TextBox tBText;
         private System.Windows.Forms.GroupBox gBStart;
         private System.Windows.Forms.Label lBPort;
         private System.Windows.Forms.TextBox tBPort;
-        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button BTSend;
         private System.Windows.Forms.CheckedListBox cLBConnected;
         private System.Windows.Forms.SplitContainer sCMain;
         private System.Windows.Forms.ToolStripMenuItem closeSelectedSToolStripMenuItem;
         private System.Windows.Forms.CheckBox cBAll;
+        public System.Windows.Forms.RichTextBox rtbMSG;
     }
 }
 
