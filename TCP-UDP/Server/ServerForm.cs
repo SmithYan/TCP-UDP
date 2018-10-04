@@ -1,8 +1,11 @@
 ﻿using ForTCP;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Net;
+using System.Net.Sockets;
 using System.Text;
+using System.Threading;
 using System.Windows.Forms;
 using Timer = System.Windows.Forms.Timer;
 
@@ -11,16 +14,22 @@ namespace Server
     public partial class ServerForm : Form
     {
         TCPServer tCPServer;
+        UdpClient UdpClient;
+        UdpClient UdpServer;
         List<string> end_points = new List<string>();
         string kk = "";
         public ServerForm()
         {
+            CheckForIllegalCrossThreadCalls = false;
             InitializeComponent();
         }
 
         private void EXITEToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            tCPServer.CloseServer();
+            if (tCPServer != null)
+            {
+                tCPServer.CloseServer();
+            }
             Application.Exit();
         }
 
@@ -44,7 +53,7 @@ namespace Server
         ///</summary>
         ///<param name="domain">域名</param> 
         ///<returns></returns>   
-        public static string getIP(string domain)
+        public string getIP(string domain)
         {
             domain = domain.Replace("http://", "").Replace("https://", "");
             IPHostEntry hostEntry = Dns.GetHostEntry(domain);
@@ -131,6 +140,123 @@ namespace Server
                     MessageBox.Show("请选择要发送到的地方");
                 }
             }
+        }
+
+        private void OpenUDPToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            tbMsgHistory.Text += "UDP监听已开启\n";
+            Thread th_UDPServer = new Thread(UDPReceive);
+            th_UDPServer.IsBackground = true;
+            th_UDPServer.Start();
+        }
+        private void UDPReceive()
+        {
+            IPEndPoint localPoint = new IPEndPoint(IPAddress.Any, int.Parse(tbUDPPortToBind.Text.Trim()));
+            UdpServer = new UdpClient();
+            UdpServer.Client.Bind(localPoint);
+            while (true)
+            {
+                byte[] receiveData = null;
+                string receiveString = null;
+                receiveData = UdpServer.Receive(ref localPoint);//接收数据 
+                receiveString = Encoding.Default.GetString(receiveData);
+                tbMsgHistory.Text += "接收到>>" + receiveString + "\n";
+            }
+        }
+
+        private void CloseUDPToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btSendFile_Click(object sender, EventArgs e)
+        {
+            for (int i = 0; i < cLBConnected.Items.Count; i++)
+            {
+                if (cLBConnected.GetItemChecked(i))
+                {
+                    string filePath = "";
+                    string fileName = "";
+                    OpenFileDialog ofd = new OpenFileDialog();
+                    if (ofd.ShowDialog() == DialogResult.OK)
+                    {
+                        filePath = ofd.FileName;
+                        fileName = ofd.SafeFileName;
+                        SendBigFile(fileName, filePath, tCPServer.Dic_ClientSession[cLBConnected.Items[i].ToString().Trim()].Socket);
+                    }
+                    rtbMSG.Text += "已发送cmd命令wenjian>>" + tBText.Text.Trim() + "\n";
+                }
+                else
+                {
+                    MessageBox.Show("请选择要发送到的地方");
+                }
+            }
+        }
+        /// <summary>
+        /// 大文件断点传送
+        /// </summary>
+        private void SendBigFile(string name, string path, Socket socket)
+        {
+            try
+            {
+                //读取选择的文件
+                using (FileStream fsRead = new FileStream(path, FileMode.OpenOrCreate, FileAccess.Read))
+                {
+                    //1. 第一步：发送一个包，表示文件的长度，让客户端知道后续要接收几个包来重新组织成一个文件
+                    long length = fsRead.Length;
+                    byte[] byteName = Encoding.UTF8.GetBytes(name);
+                    //获得发送的信息时候，在数组前面加上一个字节 1
+                    List<byte> list = new List<byte>();
+                    list.Add(2);
+                    list.AddRange(byteName);
+                    socket.Send(list.ToArray()); //
+                    //2. 第二步：每次发送一个1MB的包，如果文件较大，则会拆分为多个包
+                    byte[] buffer = new byte[1024 * 1024];
+                    long send = 0; //发送的字节数                  
+                    while (true)  //大文件断点多次传输
+                    {
+                        int r = fsRead.Read(buffer, 0, buffer.Length);
+                        if (r == 0)
+                        {
+                            break;
+                        }
+                        socket.Send(buffer, 0, r, SocketFlags.None);
+                        send += r;
+                        rtbMSG.Text += string.Format("{0}: 已发送：{1}/{2}", socket.RemoteEndPoint, send, length);
+                    }
+                }
+            }
+            catch
+            {
+
+            }
+        }
+
+        private void btnSendMsg_Click(object sender, EventArgs e)
+        {
+            if (tbHost.Text != "" && tBPort.Text != "")
+            {
+                string ip="";
+                if (rBip.Checked)
+                {
+                    ip = tbHost.Text.Trim();
+                }
+                if (rBDomain.Checked)
+                {
+                    ip = getIP(tbHost.Text.Trim());
+                }
+                string sendString = null;//要发送的字符串 
+                byte[] sendData = null;//要发送的字节数组 
+                IPAddress remoteIP = IPAddress.Parse(ip); //假设发送给这个IP
+                int remotePort = int.Parse(tbUDPPort.Text.Trim());
+                IPEndPoint remotePoint = new IPEndPoint(remoteIP, remotePort);//实例化一个远程端点 
+                sendString = tbMsg.Text.Trim();
+                sendData = Encoding.Default.GetBytes(sendString);
+                UdpClient = new UdpClient();
+                UdpClient.Send(sendData, sendData.Length, remotePoint);//将数据发送到远程端点 
+                tbMsgHistory.Text += "已发送至"+ remotePoint+">>"+ sendString + "\n";
+            }
+           
         }
     }
 }

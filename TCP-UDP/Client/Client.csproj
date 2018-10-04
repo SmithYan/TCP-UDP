@@ -84,10 +84,6 @@
       <Project>{abba074e-3b99-46f6-b5cf-5428202044ff}</Project>
       <Name>ForTCP</Name>
     </ProjectReference>
-    <ProjectReference Include="..\ForUDP\ForUDP.csproj">
-      <Project>{1197a336-f40d-440f-a459-207273106712}</Project>
-      <Name>ForUDP</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

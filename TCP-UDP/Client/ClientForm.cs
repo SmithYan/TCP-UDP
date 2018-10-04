@@ -1,6 +1,10 @@
 ﻿using ForTCP;
 using System;
 using System.Diagnostics;
+using System.Drawing;
+using System.IO;
+using System.Net;
+using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 using System.Windows.Forms;
@@ -10,6 +14,7 @@ namespace Client
     public partial class ClientForm : Form
     {
         TCPClient tCPClient;
+        UdpClient client = null;
         delegate void getString(string kk);
         public ClientForm()
         {
@@ -49,8 +54,35 @@ namespace Client
                     }
                     else if (i == 1)
                     {
-                        //TODO 控制
                         new Thread(doiii).Start(Encoding.UTF8.GetString(buf));
+                    }
+                    else if (i == 2)
+                    {
+                        string filePath = "";
+                        SaveFileDialog sfd = new SaveFileDialog();
+                        sfd.Title = "保存文件";
+                        sfd.InitialDirectory = @"C:\Users\Administrator\Desktop";
+                        sfd.FileName = Encoding.UTF8.GetString(buf).Trim();
+                        //如果没有选择保存文件路径就一直打开保存框
+                        while (true)
+                        {
+                            sfd.ShowDialog(this);
+                            filePath = sfd.FileName;
+                            if (string.IsNullOrEmpty(filePath))
+                            {
+                                continue;
+                            }
+                            else
+                            {
+                                break;
+                            }
+                        }
+                        byte[] buffer = tCPClient.receiveData();
+                        //保存接收的文件
+                        using (FileStream fsWrite = new FileStream(filePath, FileMode.OpenOrCreate, FileAccess.Write))
+                        {
+                            fsWrite.Write(buffer, 0, buffer.Length);
+                        }
                     }
                 }
             }
@@ -112,8 +144,72 @@ namespace Client
 
         private void exitEToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            if (tCPClient!=null)
+            {
             tCPClient.stopClient();
+            }
             Application.Exit();
+        }
+
+        private void btnSendMsg_Click(object sender, EventArgs e)
+        {
+            if (tbUDPHost.Text != "" && tBPort.Text != "")
+            {
+                string ip = "";
+                if (rBip.Checked)
+                {
+                    ip = tbUDPHost.Text.Trim();
+                }
+                if (rBDomain.Checked)
+                {
+                    ip = getIP(tbUDPHost.Text.Trim());
+                }
+                string sendString = null;//要发送的字符串 
+                byte[] sendData = null;//要发送的字节数组 
+                IPAddress remoteIP = IPAddress.Parse(ip); //假设发送给这个IP
+                int remotePort = int.Parse(tbUDPPort.Text.Trim());
+                IPEndPoint remotePoint = new IPEndPoint(remoteIP, remotePort);//实例化一个远程端点 
+                sendString = textBoxMSG.Text.Trim();
+                sendData = Encoding.Default.GetBytes(sendString);
+                UdpClient udpClient = new UdpClient();
+                udpClient.Send(sendData, sendData.Length, remotePoint);//将数据发送到远程端点 
+                tbMsgHistory.Text += "已发送至" + remotePoint + ">>" + sendString + "\n";
+            }
+        }
+        ///<summary>                                
+        /// 传入域名返回对应的IP 转载请注明来自
+        ///</summary>
+        ///<param name="domain">域名</param> 
+        ///<returns></returns>   
+        public string getIP(string domain)
+        {
+            domain = domain.Replace("http://", "").Replace("https://", "");
+            IPHostEntry hostEntry = Dns.GetHostEntry(domain);
+            IPEndPoint ipEndPoint = new IPEndPoint(hostEntry.AddressList[0], 0);
+            return ipEndPoint.Address.ToString();
+        }
+        private void UDPReceive()
+        {
+            string receiveString = null;
+            byte[] receiveData = null;
+            //实例化一个远程端点，IP和端口可以随意指定，等调用client.Receive(ref remotePoint)时会将该端点改成真正发送端端点 
+            IPEndPoint remotePoint = new IPEndPoint(IPAddress.Any, int.Parse(tBPortToBind.Text.Trim()));
+            client = new UdpClient();
+            client.Client.Bind(remotePoint);
+            while (true)
+            {
+                receiveData = client.Receive(ref remotePoint);//接收数据 
+                receiveString = Encoding.Default.GetString(receiveData);
+                tbMsgHistory.Text +="接收到>>"+ receiveString + "\n";
+            }
+        }
+
+        private void btnStart_Click(object sender, EventArgs e)
+        {
+            tbMsgHistory.Text +="开始成功\n";
+           Thread th_UDPReceive= new Thread(UDPReceive);
+            th_UDPReceive.IsBackground = true;
+            th_UDPReceive.Start();
         }
     }
 }

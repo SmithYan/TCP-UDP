@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.menuStrip1 = new System.Windows.Forms.MenuStrip();
+            this.menuStripMain = new System.Windows.Forms.MenuStrip();
             this.TCPTToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.OpenTCPToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.CloseTCPToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -52,7 +52,22 @@
             this.tBText = new System.Windows.Forms.TextBox();
             this.rtbMSG = new System.Windows.Forms.RichTextBox();
             this.tabPageUDP = new System.Windows.Forms.TabPage();
-            this.menuStrip1.SuspendLayout();
+            this.gbServer = new System.Windows.Forms.GroupBox();
+            this.tbUDPPort = new System.Windows.Forms.MaskedTextBox();
+            this.tbHost = new System.Windows.Forms.MaskedTextBox();
+            this.lblPort = new System.Windows.Forms.Label();
+            this.rBip = new System.Windows.Forms.RadioButton();
+            this.rBDomain = new System.Windows.Forms.RadioButton();
+            this.gbMsg = new System.Windows.Forms.GroupBox();
+            this.btnSendMsg = new System.Windows.Forms.Button();
+            this.tbMsg = new System.Windows.Forms.TextBox();
+            this.gbFileTrans = new System.Windows.Forms.GroupBox();
+            this.btnStopTrans = new System.Windows.Forms.Button();
+            this.panel1 = new System.Windows.Forms.Panel();
+            this.btSendFile = new System.Windows.Forms.Button();
+            this.tbUDPPortToBind = new System.Windows.Forms.TextBox();
+            this.tbMsgHistory = new System.Windows.Forms.RichTextBox();
+            this.menuStripMain.SuspendLayout();
             this.tabControlMain.SuspendLayout();
             this.tabPageTCP.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.sCMain)).BeginInit();
@@ -61,21 +76,25 @@
             this.sCMain.SuspendLayout();
             this.gBStart.SuspendLayout();
             this.gBSend.SuspendLayout();
+            this.tabPageUDP.SuspendLayout();
+            this.gbServer.SuspendLayout();
+            this.gbMsg.SuspendLayout();
+            this.gbFileTrans.SuspendLayout();
+            this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
-            // menuStrip1
+            // menuStripMain
             // 
-            this.menuStrip1.ImageScalingSize = new System.Drawing.Size(20, 20);
-            this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.menuStripMain.ImageScalingSize = new System.Drawing.Size(20, 20);
+            this.menuStripMain.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.TCPTToolStripMenuItem,
             this.UDPUToolStripMenuItem,
             this.EXITEToolStripMenuItem});
-            this.menuStrip1.Location = new System.Drawing.Point(0, 0);
-            this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Padding = new System.Windows.Forms.Padding(4, 2, 0, 2);
-            this.menuStrip1.Size = new System.Drawing.Size(656, 25);
-            this.menuStrip1.TabIndex = 0;
-            this.menuStrip1.Text = "menuStripMain";
+            this.menuStripMain.Location = new System.Drawing.Point(0, 0);
+            this.menuStripMain.Name = "menuStripMain";
+            this.menuStripMain.Padding = new System.Windows.Forms.Padding(4, 2, 0, 2);
+            this.menuStripMain.Size = new System.Drawing.Size(548, 25);
+            this.menuStripMain.TabIndex = 0;
             // 
             // TCPTToolStripMenuItem
             // 
@@ -120,14 +139,16 @@
             // OpenUDPToolStripMenuItem
             // 
             this.OpenUDPToolStripMenuItem.Name = "OpenUDPToolStripMenuItem";
-            this.OpenUDPToolStripMenuItem.Size = new System.Drawing.Size(159, 22);
+            this.OpenUDPToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.OpenUDPToolStripMenuItem.Text = "OpenUDP（&O)";
+            this.OpenUDPToolStripMenuItem.Click += new System.EventHandler(this.OpenUDPToolStripMenuItem_Click);
             // 
             // CloseUDPToolStripMenuItem
             // 
             this.CloseUDPToolStripMenuItem.Name = "CloseUDPToolStripMenuItem";
-            this.CloseUDPToolStripMenuItem.Size = new System.Drawing.Size(159, 22);
+            this.CloseUDPToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.CloseUDPToolStripMenuItem.Text = "CloseUDP（&C)";
+            this.CloseUDPToolStripMenuItem.Click += new System.EventHandler(this.CloseUDPToolStripMenuItem_Click);
             // 
             // EXITEToolStripMenuItem
             // 
@@ -145,7 +166,7 @@
             this.tabControlMain.Margin = new System.Windows.Forms.Padding(2);
             this.tabControlMain.Name = "tabControlMain";
             this.tabControlMain.SelectedIndex = 0;
-            this.tabControlMain.Size = new System.Drawing.Size(656, 448);
+            this.tabControlMain.Size = new System.Drawing.Size(548, 448);
             this.tabControlMain.TabIndex = 1;
             // 
             // tabPageTCP
@@ -155,7 +176,7 @@
             this.tabPageTCP.Margin = new System.Windows.Forms.Padding(2);
             this.tabPageTCP.Name = "tabPageTCP";
             this.tabPageTCP.Padding = new System.Windows.Forms.Padding(2);
-            this.tabPageTCP.Size = new System.Drawing.Size(648, 422);
+            this.tabPageTCP.Size = new System.Drawing.Size(540, 422);
             this.tabPageTCP.TabIndex = 0;
             this.tabPageTCP.Text = "TCPServer";
             this.tabPageTCP.UseVisualStyleBackColor = true;
@@ -170,6 +191,7 @@
             // sCMain.Panel1
             // 
             this.sCMain.Panel1.BackColor = System.Drawing.SystemColors.ActiveCaption;
+            this.sCMain.Panel1.Controls.Add(this.btSendFile);
             this.sCMain.Panel1.Controls.Add(this.cBAll);
             this.sCMain.Panel1.Controls.Add(this.cLBConnected);
             this.sCMain.Panel1.Controls.Add(this.gBStart);
@@ -178,14 +200,14 @@
             // sCMain.Panel2
             // 
             this.sCMain.Panel2.Controls.Add(this.rtbMSG);
-            this.sCMain.Size = new System.Drawing.Size(644, 418);
+            this.sCMain.Size = new System.Drawing.Size(536, 418);
             this.sCMain.SplitterDistance = 200;
             this.sCMain.TabIndex = 13;
             // 
             // cBAll
             // 
             this.cBAll.AutoSize = true;
-            this.cBAll.Location = new System.Drawing.Point(409, 7);
+            this.cBAll.Location = new System.Drawing.Point(297, 36);
             this.cBAll.Name = "cBAll";
             this.cBAll.Size = new System.Drawing.Size(72, 16);
             this.cBAll.TabIndex = 13;
@@ -198,7 +220,7 @@
             this.cLBConnected.BackColor = System.Drawing.SystemColors.ActiveCaption;
             this.cLBConnected.Dock = System.Windows.Forms.DockStyle.Right;
             this.cLBConnected.FormattingEnabled = true;
-            this.cLBConnected.Location = new System.Drawing.Point(493, 0);
+            this.cLBConnected.Location = new System.Drawing.Point(385, 0);
             this.cLBConnected.Name = "cLBConnected";
             this.cLBConnected.Size = new System.Drawing.Size(151, 200);
             this.cLBConnected.TabIndex = 12;
@@ -294,34 +316,201 @@
             this.rtbMSG.Location = new System.Drawing.Point(0, 0);
             this.rtbMSG.Margin = new System.Windows.Forms.Padding(2);
             this.rtbMSG.Name = "rtbMSG";
-            this.rtbMSG.Size = new System.Drawing.Size(644, 214);
+            this.rtbMSG.Size = new System.Drawing.Size(536, 214);
             this.rtbMSG.TabIndex = 3;
             this.rtbMSG.Text = "";
             // 
             // tabPageUDP
             // 
+            this.tabPageUDP.Controls.Add(this.gbFileTrans);
+            this.tabPageUDP.Controls.Add(this.gbMsg);
+            this.tabPageUDP.Controls.Add(this.gbServer);
             this.tabPageUDP.Location = new System.Drawing.Point(4, 22);
             this.tabPageUDP.Margin = new System.Windows.Forms.Padding(2);
             this.tabPageUDP.Name = "tabPageUDP";
             this.tabPageUDP.Padding = new System.Windows.Forms.Padding(2);
-            this.tabPageUDP.Size = new System.Drawing.Size(648, 422);
+            this.tabPageUDP.Size = new System.Drawing.Size(540, 422);
             this.tabPageUDP.TabIndex = 1;
             this.tabPageUDP.Text = "UDPServer";
             this.tabPageUDP.UseVisualStyleBackColor = true;
+            // 
+            // gbServer
+            // 
+            this.gbServer.Controls.Add(this.tbUDPPortToBind);
+            this.gbServer.Controls.Add(this.rBDomain);
+            this.gbServer.Controls.Add(this.rBip);
+            this.gbServer.Controls.Add(this.tbUDPPort);
+            this.gbServer.Controls.Add(this.tbHost);
+            this.gbServer.Controls.Add(this.lblPort);
+            this.gbServer.Dock = System.Windows.Forms.DockStyle.Top;
+            this.gbServer.Location = new System.Drawing.Point(2, 2);
+            this.gbServer.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            this.gbServer.Name = "gbServer";
+            this.gbServer.Padding = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            this.gbServer.Size = new System.Drawing.Size(536, 81);
+            this.gbServer.TabIndex = 8;
+            this.gbServer.TabStop = false;
+            this.gbServer.Text = "Aim IPEndPoint";
+            // 
+            // tbUDPPort
+            // 
+            this.tbUDPPort.Location = new System.Drawing.Point(154, 45);
+            this.tbUDPPort.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            this.tbUDPPort.Mask = "99999";
+            this.tbUDPPort.Name = "tbUDPPort";
+            this.tbUDPPort.PromptChar = ' ';
+            this.tbUDPPort.Size = new System.Drawing.Size(71, 21);
+            this.tbUDPPort.TabIndex = 6;
+            this.tbUDPPort.Text = "6666";
+            // 
+            // tbHost
+            // 
+            this.tbHost.Location = new System.Drawing.Point(17, 45);
+            this.tbHost.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            this.tbHost.Name = "tbHost";
+            this.tbHost.Size = new System.Drawing.Size(110, 21);
+            this.tbHost.TabIndex = 3;
+            this.tbHost.Text = "127.0.0.1";
+            // 
+            // lblPort
+            // 
+            this.lblPort.AutoSize = true;
+            this.lblPort.Location = new System.Drawing.Point(174, 25);
+            this.lblPort.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.lblPort.Name = "lblPort";
+            this.lblPort.Size = new System.Drawing.Size(29, 12);
+            this.lblPort.TabIndex = 1;
+            this.lblPort.Text = "Port";
+            // 
+            // rBip
+            // 
+            this.rBip.AutoSize = true;
+            this.rBip.Checked = true;
+            this.rBip.Location = new System.Drawing.Point(17, 21);
+            this.rBip.Name = "rBip";
+            this.rBip.Size = new System.Drawing.Size(35, 16);
+            this.rBip.TabIndex = 7;
+            this.rBip.TabStop = true;
+            this.rBip.Text = "ip";
+            this.rBip.UseVisualStyleBackColor = true;
+            // 
+            // rBDomain
+            // 
+            this.rBDomain.AutoSize = true;
+            this.rBDomain.Location = new System.Drawing.Point(61, 21);
+            this.rBDomain.Name = "rBDomain";
+            this.rBDomain.Size = new System.Drawing.Size(59, 16);
+            this.rBDomain.TabIndex = 7;
+            this.rBDomain.Text = "domain";
+            this.rBDomain.UseVisualStyleBackColor = true;
+            // 
+            // gbMsg
+            // 
+            this.gbMsg.Controls.Add(this.tbMsgHistory);
+            this.gbMsg.Controls.Add(this.panel1);
+            this.gbMsg.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.gbMsg.Location = new System.Drawing.Point(2, 83);
+            this.gbMsg.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            this.gbMsg.Name = "gbMsg";
+            this.gbMsg.Padding = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            this.gbMsg.Size = new System.Drawing.Size(536, 337);
+            this.gbMsg.TabIndex = 9;
+            this.gbMsg.TabStop = false;
+            this.gbMsg.Text = "Message";
+            // 
+            // btnSendMsg
+            // 
+            this.btnSendMsg.Location = new System.Drawing.Point(386, 12);
+            this.btnSendMsg.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            this.btnSendMsg.Name = "btnSendMsg";
+            this.btnSendMsg.Size = new System.Drawing.Size(100, 27);
+            this.btnSendMsg.TabIndex = 1;
+            this.btnSendMsg.Text = "Send";
+            this.btnSendMsg.UseVisualStyleBackColor = true;
+            this.btnSendMsg.Click += new System.EventHandler(this.btnSendMsg_Click);
+            // 
+            // tbMsg
+            // 
+            this.tbMsg.Location = new System.Drawing.Point(13, 12);
+            this.tbMsg.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            this.tbMsg.Multiline = true;
+            this.tbMsg.Name = "tbMsg";
+            this.tbMsg.Size = new System.Drawing.Size(357, 22);
+            this.tbMsg.TabIndex = 0;
+            // 
+            // gbFileTrans
+            // 
+            this.gbFileTrans.Controls.Add(this.btnStopTrans);
+            this.gbFileTrans.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.gbFileTrans.Location = new System.Drawing.Point(2, 355);
+            this.gbFileTrans.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            this.gbFileTrans.Name = "gbFileTrans";
+            this.gbFileTrans.Padding = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            this.gbFileTrans.Size = new System.Drawing.Size(536, 65);
+            this.gbFileTrans.TabIndex = 10;
+            this.gbFileTrans.TabStop = false;
+            this.gbFileTrans.Text = "FileTransmit";
+            // 
+            // btnStopTrans
+            // 
+            this.btnStopTrans.Location = new System.Drawing.Point(29, 23);
+            this.btnStopTrans.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            this.btnStopTrans.Name = "btnStopTrans";
+            this.btnStopTrans.Size = new System.Drawing.Size(100, 27);
+            this.btnStopTrans.TabIndex = 0;
+            this.btnStopTrans.Text = "StopTransmit";
+            this.btnStopTrans.UseVisualStyleBackColor = true;
+            // 
+            // panel1
+            // 
+            this.panel1.Controls.Add(this.tbMsg);
+            this.panel1.Controls.Add(this.btnSendMsg);
+            this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panel1.Location = new System.Drawing.Point(4, 17);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(528, 49);
+            this.panel1.TabIndex = 3;
+            // 
+            // btSendFile
+            // 
+            this.btSendFile.Location = new System.Drawing.Point(294, 7);
+            this.btSendFile.Name = "btSendFile";
+            this.btSendFile.Size = new System.Drawing.Size(75, 23);
+            this.btSendFile.TabIndex = 14;
+            this.btSendFile.Text = "SendFile";
+            this.btSendFile.UseVisualStyleBackColor = true;
+            this.btSendFile.Click += new System.EventHandler(this.btSendFile_Click);
+            // 
+            // tbUDPPortToBind
+            // 
+            this.tbUDPPortToBind.Location = new System.Drawing.Point(274, 45);
+            this.tbUDPPortToBind.Name = "tbUDPPortToBind";
+            this.tbUDPPortToBind.Size = new System.Drawing.Size(68, 21);
+            this.tbUDPPortToBind.TabIndex = 8;
+            this.tbUDPPortToBind.Text = "7777";
+            // 
+            // tbMsgHistory
+            // 
+            this.tbMsgHistory.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tbMsgHistory.Location = new System.Drawing.Point(4, 66);
+            this.tbMsgHistory.Name = "tbMsgHistory";
+            this.tbMsgHistory.Size = new System.Drawing.Size(528, 268);
+            this.tbMsgHistory.TabIndex = 4;
+            this.tbMsgHistory.Text = "";
             // 
             // ServerForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(656, 473);
+            this.ClientSize = new System.Drawing.Size(548, 473);
             this.Controls.Add(this.tabControlMain);
-            this.Controls.Add(this.menuStrip1);
-            this.MainMenuStrip = this.menuStrip1;
+            this.Controls.Add(this.menuStripMain);
+            this.MainMenuStrip = this.menuStripMain;
             this.Margin = new System.Windows.Forms.Padding(2);
             this.Name = "ServerForm";
             this.Text = "Server";
-            this.menuStrip1.ResumeLayout(false);
-            this.menuStrip1.PerformLayout();
+            this.menuStripMain.ResumeLayout(false);
+            this.menuStripMain.PerformLayout();
             this.tabControlMain.ResumeLayout(false);
             this.tabPageTCP.ResumeLayout(false);
             this.sCMain.Panel1.ResumeLayout(false);
@@ -333,6 +522,13 @@
             this.gBStart.PerformLayout();
             this.gBSend.ResumeLayout(false);
             this.gBSend.PerformLayout();
+            this.tabPageUDP.ResumeLayout(false);
+            this.gbServer.ResumeLayout(false);
+            this.gbServer.PerformLayout();
+            this.gbMsg.ResumeLayout(false);
+            this.gbFileTrans.ResumeLayout(false);
+            this.panel1.ResumeLayout(false);
+            this.panel1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -340,7 +536,7 @@
 
         #endregion
 
-        private System.Windows.Forms.MenuStrip menuStrip1;
+        private System.Windows.Forms.MenuStrip menuStripMain;
         private System.Windows.Forms.ToolStripMenuItem TCPTToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem OpenTCPToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem CloseTCPToolStripMenuItem;
@@ -364,6 +560,21 @@
         private System.Windows.Forms.ToolStripMenuItem closeSelectedSToolStripMenuItem;
         private System.Windows.Forms.CheckBox cBAll;
         public System.Windows.Forms.RichTextBox rtbMSG;
+        private System.Windows.Forms.GroupBox gbServer;
+        private System.Windows.Forms.MaskedTextBox tbUDPPort;
+        private System.Windows.Forms.MaskedTextBox tbHost;
+        private System.Windows.Forms.Label lblPort;
+        private System.Windows.Forms.RadioButton rBDomain;
+        private System.Windows.Forms.RadioButton rBip;
+        private System.Windows.Forms.GroupBox gbFileTrans;
+        private System.Windows.Forms.Button btnStopTrans;
+        private System.Windows.Forms.GroupBox gbMsg;
+        private System.Windows.Forms.Button btnSendMsg;
+        private System.Windows.Forms.TextBox tbMsg;
+        private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.Button btSendFile;
+        private System.Windows.Forms.TextBox tbUDPPortToBind;
+        private System.Windows.Forms.RichTextBox tbMsgHistory;
     }
 }
 
